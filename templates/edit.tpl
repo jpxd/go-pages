@@ -1,8 +1,8 @@
 {{ template "header" . }}
 <div class="row col">
-	<form method="POST">
+	<form method="POST" action="?">
 		<div class="form-group col">
-			<textarea type="text" class="form-control" rows="15" placeholder="Insert markdown here" name="content">{{ .Content }}</textarea>
+			<textarea type="text" class="form-control editbox" rows="15" placeholder="Insert markdown here" name="content">{{ .Content }}</textarea>
 		</div>
 		<div class="form-inline col">
 			<div class="form-group col-md-8">
