@@ -75,11 +75,12 @@ func parseLog(bytes []byte) *Log {
 }
 
 func listDirectories(path string) []*Directory {
-	s := make([]*Directory, 0)
+	var s []*Directory
 	dirPath := ""
 	for i, dir := range strings.Split(path, "/") {
 		if i == 0 {
-			dirPath += dir
+			dirPath = "/"
+			dir = "root"
 		} else {
 			dirPath += "/" + dir
 		}
@@ -105,11 +106,9 @@ func gitCmd(cmd *exec.Cmd) *bytes.Buffer {
 	cmd.Stdout = &outBuf
 	cmd.Stderr = &errBuf
 	if err := cmd.Run(); err != nil {
-		log.Printf("Error: command %q failed (%v) with: %s",
-			strings.Join(cmd.Args, " "), err, errBuf.String())
+		//log.Printf("Error: command %q failed (%v) with: %s",
+		//	strings.Join(cmd.Args, " "), err, errBuf.String())
 		return &bytes.Buffer{}
 	}
 	return &outBuf
 }
-
-
