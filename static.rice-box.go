@@ -78,7 +78,7 @@ func init() {
 	// register embeddedBox
 	embedded.RegisterEmbeddedBox(`static`, &embedded.EmbeddedBox{
 		Name: `static`,
-		Time: time.Unix(1437927221, 0),
+		Time: time.Unix(1437929972, 0),
 		Dirs: map[string]*embedded.EmbeddedDir{
 			"":      dir9,
 			"css":   dira,
