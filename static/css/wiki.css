@@ -38,8 +38,11 @@ h1:first-child {
 	}
 }
 
-.editbox {
+textarea.editbox {
 	font-family: Monaco,Menlo,Consolas,"Courier New",monospace;
+	height: calc(100vh - 200px);
+	min-height: 200px;
+	resize: vertical;
 }
 
 code {

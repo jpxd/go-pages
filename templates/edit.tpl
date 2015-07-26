@@ -6,10 +6,10 @@
 		</div>
 		<div class="form-inline col">
 			<div class="form-group col-md-8">
-				<input type="text" class="form-control" name="msg" placeholder="Changelog" />
+				<input type="text" class="form-control" name="msg" placeholder="Changelog" value="{{ .Changelog }}" />
 			</div>
 			<div class="form-group col-md-2">
-				<input type="text" class="form-control" name="author" placeholder="Author" />
+				<input type="text" class="form-control" name="author" placeholder="Author" value="{{ .Author }}" />
 			</div>
 			<div class="form-group col-md-2">
 				<button type="submit" class="btn btn-default">

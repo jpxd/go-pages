@@ -14,6 +14,8 @@ import (
 	"os"
 	"path"
 	"strconv"
+	"strings"
+	"time"
 
 	"github.com/GeertJohan/go.rice"
 	"github.com/russross/blackfriday"
@@ -43,6 +45,8 @@ type Node struct {
 
 	Edit      bool // Edit mode
 	Revisions bool // Show revisions
+	Author    string
+	Changelog string
 }
 
 // Directory lists nodes.
@@ -98,10 +102,15 @@ func wikiHandler(w http.ResponseWriter, r *http.Request) {
 	node.Revisions = ParseBool(r.FormValue("revisions"))
 	node.Edit = ParseBool(r.FormValue("edit"))
 
+	if cookie, err := r.Cookie("author"); err == nil {
+		node.Author = cookie.Value
+	}
+
 	node.Dirs = listDirectories(r.URL.Path)
 
 	// We have content, update
-	if content != "" && changelog != "" {
+	if content != "" && changelog != "" && author != "" {
+		node.Author = author
 		bytes := []byte(content)
 		err := writeFile(bytes, filePath)
 		if err != nil {
@@ -123,7 +132,18 @@ func wikiHandler(w http.ResponseWriter, r *http.Request) {
 		// Show specific revision
 		node.Revision = revision
 		node.GitShow().GitLog()
-		node.Edit = node.Edit || len(node.Bytes) == 0
+
+		createNew := len(node.Bytes) == 0
+		node.Edit = node.Edit || createNew
+
+		changelogPageName := strings.TrimLeft(node.Path, "/")
+		if changelogPageName == "" {
+			changelogPageName = "index page"
+		}
+		node.Changelog = fmt.Sprintf("Edit %s", changelogPageName)
+		if createNew {
+			node.Changelog = fmt.Sprintf("Create %s", changelogPageName)
+		}
 
 		if node.Edit {
 			node.Content = string(node.Bytes)
@@ -141,6 +161,12 @@ func writeFile(bytes []byte, entry string) error {
 		return ioutil.WriteFile(entry, bytes, 0644)
 	}
 	return err
+}
+
+func setCookie(w http.ResponseWriter, name, value string) {
+	expiration := time.Now().AddDate(1, 0, 0)
+	cookie := http.Cookie{Name: name, Value: value, Expires: expiration}
+	http.SetCookie(w, &cookie)
 }
 
 func renderTemplate(w http.ResponseWriter, node *Node) {
@@ -186,6 +212,7 @@ func renderTemplate(w http.ResponseWriter, node *Node) {
 			log.Printf("Couldn't parse template %q: %v", name, err)
 		}
 	}
+	setCookie(w, "author", node.Author)
 	if err = t.Execute(w, node); err != nil {
 		log.Printf("Could not execute template: %v", err)
 	}
