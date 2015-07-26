@@ -32,8 +32,8 @@ h1:first-child {
 	padding-left: 0;
 }
 
-@media (min-width: @screen-md-min) {
-	input[name="msg"] {
+@media (max-width: 1000px) {
+	input.changelog {
 		min-width: 50vw;
 	}
 }
@@ -47,4 +47,8 @@ textarea.editbox {
 
 code {
 	white-space: pre-line;
+}
+
+img {
+	max-width: 100%;
 }

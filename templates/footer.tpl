@@ -1,9 +1,12 @@
 {{define "footer"}}
 <div class="row col">
 	<hr class="text-muted" />
-	<a href="https://github.com/jpxd/g-wiki">
-		<p class="text-muted text-center">g-wiki on Github</p>
-	</a>
+
+		<p class="text-center text-muted">
+			<a class="text-muted" href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet">Markdown Cheatsheet</a> |
+			<a class="text-muted" href="https://github.com/jpxd/g-wiki">Source on Github</a>
+		</p>
+
 </div>
 <!-- end container -->
 </div>
