@@ -222,13 +222,11 @@ func main() {
 		log.Fatal(err)
 	}
 
+	// Static resources
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
+
 	// Handlers
 	http.HandleFunc("/", wikiHandler)
-
-	// Static resources
-	http.Handle("/static/",
-		http.StripPrefix("/static/",
-			http.FileServer(http.Dir("./static/"))))
 
 	log.Printf("Start listening on %s.", addr)
 	log.Fatalln(http.ListenAndServe(addr, nil))
