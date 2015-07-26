@@ -5,6 +5,11 @@
  <title>{{.Title}}</title>
  <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
  <meta name="viewport" content="width=device-width, initial-scale=1">
+ <style>
+   .container{
+     margin-top: 15px;
+   }
+ </style>
 </head>
 <body>
 <div class="container">
