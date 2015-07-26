@@ -1,7 +1,7 @@
 bin
 pkg
 # Wiki files
-files/*
+files/
 # Build dependencies
 src/github.com
 # vim
