@@ -23,14 +23,14 @@ var (
 	directory = "files"
 	logLimit  = 5
 	logLimitS = ""
-	title = "g-wiki"
+	title     = "g-wiki"
 
 	templateBox *rice.Box
 )
 
 // Node holds a Wiki node.
 type Node struct {
-	Title string
+	Title    string
 	Path     string
 	File     string
 	Content  string
@@ -91,8 +91,8 @@ func wikiHandler(w http.ResponseWriter, r *http.Request) {
 
 	filePath := fmt.Sprintf("%s%s.md", directory, r.URL.Path)
 	node := &Node{
-		File: r.URL.Path[1:] + ".md",
-		Path: r.URL.Path,
+		File:  r.URL.Path[1:] + ".md",
+		Path:  r.URL.Path,
 		Title: title,
 	}
 	node.Revisions = ParseBool(r.FormValue("revisions"))

@@ -8,7 +8,7 @@ rendered with go templates and [bootstrap](http://getbootstrap.com) css.
 ## Install
 
 Simply go get it:
-	
+
 	go get github.com/jpxd/g-wiki
 
 then run it
@@ -18,7 +18,7 @@ then run it
 ## Develop
 
 Templates are embedded with [go.rice](https://github.com/GeertJohan/go.rice).
-If you change a file under templates, either 
+If you change a file under templates, either
 
 	rm templates.rice-box.go
 

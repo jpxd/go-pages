@@ -1,5 +1,5 @@
 {{define "node"}}
 <div class="row col">
- {{ .Markdown }}
+	{{ .Markdown }}
 </div>
 {{end}}
