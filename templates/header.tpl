@@ -14,6 +14,22 @@
      margin-left: 0;
      margin-right: 0;
    }
+   h1:first-child{
+    margin-top: 0;
+   }
+   .edit-right{
+     float: right;
+   }
+   .edit-right:before{
+     content:none!important;
+     padding: 0!important;
+   }
+   .hash {
+    background-color: rgba(1, 1, 1, 0.14);
+    padding: 4px;
+    border-radius: 4px;
+    margin-right: 8px;
+   }
  </style>
 </head>
 <body>
@@ -27,7 +43,9 @@
       <li><a href="{{ $dir.Path }}">{{$dir.Name}}</a></li>
      {{ end }}
     {{ end }}
-   </ol>
-   {{ if .Revision}}<p class="text-muted">Revision: {{.Revision}}</p>{{end}}
+    <li class="no-before">{{ if .Revision}}<a href="?revision={{.Revision}}&revisions=1" class="text-muted">{{.Revision}}</a>{{end}}</li>
+    {{ if not .Edit}}<li class="edit-right"><a href="?edit=1" class="text-muted"><span class="glyphicon glyphicon-edit"></span> Edit</a></li>{{end}}
+ </ol>
+
  </div>
 {{end}}

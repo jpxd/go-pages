@@ -41,6 +41,7 @@ type Node struct {
 	Log      []*Log
 	Markdown template.HTML
 
+	Edit      bool // Edit mode
 	Revisions bool // Show revisions
 }
 
@@ -83,7 +84,6 @@ func wikiHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	// Params
 	content := r.FormValue("content")
-	edit := r.FormValue("edit")
 	changelog := r.FormValue("msg")
 	author := r.FormValue("author")
 	reset := r.FormValue("revert")
@@ -96,6 +96,7 @@ func wikiHandler(w http.ResponseWriter, r *http.Request) {
 		Title: title,
 	}
 	node.Revisions = ParseBool(r.FormValue("revisions"))
+	node.Edit = ParseBool(r.FormValue("edit"))
 
 	node.Dirs = listDirectories(r.URL.Path)
 
@@ -122,7 +123,7 @@ func wikiHandler(w http.ResponseWriter, r *http.Request) {
 		// Show specific revision
 		node.Revision = revision
 		node.GitShow().GitLog()
-		if edit == "true" || len(node.Bytes) == 0 {
+		if node.Edit || len(node.Bytes) == 0 {
 			node.Content = string(node.Bytes)
 			node.Template = "edit.tpl"
 		} else {
@@ -148,9 +149,7 @@ func renderTemplate(w http.ResponseWriter, node *Node) {
 	// Build template
 	if node.Markdown != "" {
 		tpl := "{{ template \"header\" . }}"
-		if node.isHead() {
-			tpl += "{{ template \"actions\" .}}"
-		} else if node.Revision != "" {
+		if !node.isHead() && node.Revision != "" {
 			tpl += "{{ template \"revision\" . }}"
 		}
 		// Add node
@@ -175,8 +174,8 @@ func renderTemplate(w http.ResponseWriter, node *Node) {
 	}
 
 	// Include the rest
-	for _, name := range []string{"header.tpl", "footer.tpl",
-		"actions.tpl", "revision.tpl",
+	for _, name := range []string{
+		"header.tpl", "footer.tpl", "revision.tpl",
 		"revisions.tpl", "node.tpl",
 	} {
 		if tpl, err := templateBox.String(name); err != nil {
