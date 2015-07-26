@@ -77,6 +77,7 @@ func parseLog(bytes []byte) *Log {
 func listDirectories(path string) []*Directory {
 	var s []*Directory
 	dirPath := ""
+	path = strings.TrimRight(path, "/")
 	for i, dir := range strings.Split(path, "/") {
 		if i == 0 {
 			s = append(s, &Directory{Path: "/", Name: "root"})
