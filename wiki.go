@@ -223,8 +223,7 @@ func main() {
 	}
 
 	// Static resources
-	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
-
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(rice.MustFindBox("static").HTTPBox())))
 	// Handlers
 	http.HandleFunc("/", wikiHandler)
 
