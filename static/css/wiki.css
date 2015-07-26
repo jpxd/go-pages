@@ -41,3 +41,7 @@ h1:first-child {
 .editbox {
 	font-family: Monaco,Menlo,Consolas,"Courier New",monospace;
 }
+
+code {
+	white-space: pre-line;
+}
