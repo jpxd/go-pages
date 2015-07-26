@@ -177,15 +177,17 @@ func renderTemplate(w http.ResponseWriter, node *Node) {
 	// Build template
 	if node.Markdown != "" {
 		tpl := "{{ template \"header\" . }}"
+
+		// Show revisions
+		if node.Revisions {
+			tpl += "{{ template \"revisions\" . }}"
+		}
+
 		if !node.isHead() && node.Revision != "" {
 			tpl += "{{ template \"revision\" . }}"
 		}
 		// Add node
 		tpl += "{{ template \"node\" . }}"
-		// Show revisions
-		if node.Revisions {
-			tpl += "{{ template \"revisions\" . }}"
-		}
 
 		// Footer
 		tpl += "{{ template \"footer\" . }}"

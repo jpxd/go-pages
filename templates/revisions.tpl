@@ -1,6 +1,5 @@
 {{define "revisions"}}
 <div class="row col">
-	<hr />
 	<div class="list-group">
 		{{range $log := .Log}} {{if $log.Link}}
 		<a href="?revision={{$log.Hash}}&revisions=1" class="list-group-item">
@@ -11,5 +10,6 @@
 		</a>
 		{{end}}
 	</div>
+	<hr />
 </div>
 {{end}}
