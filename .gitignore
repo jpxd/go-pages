@@ -10,3 +10,5 @@ src/github.com
 /wiki
 /g-wiki
 /g-wiki.exe
+# Template cache
+/templates.rice-box.go
