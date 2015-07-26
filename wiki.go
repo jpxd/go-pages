@@ -123,7 +123,9 @@ func wikiHandler(w http.ResponseWriter, r *http.Request) {
 		// Show specific revision
 		node.Revision = revision
 		node.GitShow().GitLog()
-		if node.Edit || len(node.Bytes) == 0 {
+		node.Edit = node.Edit || len(node.Bytes) == 0
+
+		if node.Edit {
 			node.Content = string(node.Bytes)
 			node.Template = "edit.tpl"
 		} else {
