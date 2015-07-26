@@ -8,7 +8,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<style>
 		.container {
-			margin-top: 15px;
+			padding-top: 20px;
 			max-width: 900px;
 		}
 
