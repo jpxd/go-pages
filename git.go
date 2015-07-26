@@ -79,12 +79,11 @@ func listDirectories(path string) []*Directory {
 	dirPath := ""
 	for i, dir := range strings.Split(path, "/") {
 		if i == 0 {
-			dirPath = "/"
-			dir = "root"
+			s = append(s, &Directory{Path: "/", Name: "root"})
 		} else {
 			dirPath += "/" + dir
+			s = append(s, &Directory{Path: dirPath, Name: dir})
 		}
-		s = append(s, &Directory{Path: dirPath, Name: dir})
 	}
 	if len(s) > 0 {
 		s[len(s)-1].Active = true
