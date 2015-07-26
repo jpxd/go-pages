@@ -1,10 +1,10 @@
 {{ template "header" . }}
-<div class="row col-md-9">
+<div class="row col">
 <form method="POST">
- <div class="form-group col-md-12">
+ <div class="form-group col">
   <textarea type="text" class="form-control" rows="15" placeholder="Insert markdown here" name="content">{{ .Content }}</textarea>
  </div>
- <div class="form-inline col-md-12">
+ <div class="form-inline col">
   <div class="form-group col-md-8">
    <input type="text" class="form-control" name="msg" placeholder="Changelog"/>
   </div>

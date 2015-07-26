@@ -1,5 +1,5 @@
 {{define "revisions"}}
-<div class="row col-md-9">
+<div class="row col">
  <hr />
  <p class="text-muted">Revisions:</p>
  <div class="list-group">
