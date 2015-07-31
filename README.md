@@ -20,7 +20,7 @@ then run it
 Templates are embedded with [go.rice](https://github.com/GeertJohan/go.rice).
 If you change a file under templates or static, either use
 
-	make run
+	make debug
 
 to execute g-wiki and load the changed files live; or
 
