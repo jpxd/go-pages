@@ -70,6 +70,7 @@ func (node *Node) isHead() bool {
 
 // ToMarkdown processes the node contents.
 func (node *Node) ToMarkdown() {
+	processExtensions(node)
 	node.Markdown = template.HTML(string(blackfriday.MarkdownCommon(node.Bytes)))
 }
 

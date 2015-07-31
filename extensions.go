@@ -4,8 +4,10 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"strings"
+	"path"
 )
 
 type WikiExtension func(opts map[string]string, path string) (md string, err error)
@@ -62,12 +64,12 @@ func executeExpression(exp, path string) (res string, err error) {
 	return extension(options, path)
 }
 
-func processExtensions(md, path string) string {
+func processExtensions(node *Node) {
 	if len(extensions) == 0 {
-		return md
+		return
 	}
 
-	hay := []byte(md)
+	hay := node.Bytes
 	buffer := bytes.Buffer{}
 	startDelimiter, endDelimiter := []byte("{{"), []byte("}}")
 
@@ -86,7 +88,7 @@ func processExtensions(md, path string) string {
 
 		exp := string(hay[:expEnd])
 
-		result, err := executeExpression(exp, path)
+		result, err := executeExpression(exp, node.Path)
 		if err != nil {
 			buffer.Write(hay[:expEnd])
 			log.Println(err)
@@ -97,15 +99,35 @@ func processExtensions(md, path string) string {
 
 	}
 	buffer.Write(hay)
-	return buffer.String()
+	node.Bytes = buffer.Bytes()
 }
 
 func registerAllExtensions() {
 	registerExtension("tree", treeExtension)
 }
 
-func treeExtension(opts map[string]string, path string) (md string, err error) {
-	return optionFallback(opts, "visible", "Ich bin nicht da!"), nil
+func treeExtension(opts map[string]string, url string) (md string, err error) {
+	dirpath := path.Join(directory, url)
+	files, err := ioutil.ReadDir(dirpath)
+	if len(files) == 0 {
+		return "Such emptyness...", nil
+	}
+	buffer := bytes.Buffer{}
+	for _, f := range files {
+		name := strings.TrimSuffix(f.Name(), ".md")
+		if strings.HasPrefix(name, ".") || len(name) == 0 {
+			continue
+		}
+		buffer.WriteString(" * [")
+		buffer.WriteString(name)
+		buffer.WriteString("](")
+		buffer.WriteString(url)
+		buffer.WriteString("/")
+		buffer.WriteString(name)
+		buffer.WriteString(")\n")
+	}
+
+	return buffer.String(), nil
 }
 
 func init() {
