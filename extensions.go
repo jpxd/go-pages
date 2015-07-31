@@ -43,7 +43,7 @@ func parseExpression(exp string) (name string, options map[string]string, err er
 		kv := strings.Split(part, ":")
 		options[kv[0]] = "true"
 		if len(kv) > 1 {
-			options[kv[0]] = kv[0]
+			options[kv[0]] = kv[1]
 		}
 	}
 
@@ -57,7 +57,7 @@ func executeExpression(exp, path string) (res string, err error) {
 	}
 	extension, ok := extensions[name]
 	if !ok {
-		return "", errors.New(fmt.Sprintf("extension '%s' in %s unknown", name, path))
+		return "", errors.New(fmt.Sprintf("unknown extension '%s' in %s", name, path))
 	}
 	return extension(options, path)
 }
@@ -92,7 +92,6 @@ func processExtensions(md, path string) string {
 			log.Println(err)
 		} else {
 			buffer.WriteString(result)
-			log.Println(result)
 		}
 		hay = hay[expEnd:]
 
@@ -101,16 +100,15 @@ func processExtensions(md, path string) string {
 	return buffer.String()
 }
 
-func init() {
-	extensions = make(map[string]WikiExtension)
-}
-
 func registerAllExtensions() {
 	registerExtension("tree", treeExtension)
 }
 
 func treeExtension(opts map[string]string, path string) (md string, err error) {
-	return "not implemented yet", nil
+	return optionFallback(opts, "visible", "Ich bin nicht da!"), nil
 }
 
-
+func init() {
+	extensions = make(map[string]WikiExtension)
+	registerAllExtensions()
+}
