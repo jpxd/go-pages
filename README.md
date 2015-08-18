@@ -27,4 +27,4 @@ to execute go-pages and load the changed files live; or
 
 	make build
 
-to regenerate templates.rice-box.go and static.templates.rice-box.go, and create a portable binary.
+to regenerate templates.rice-box.go & static.templates.rice-box.go and create a portable binary.
