@@ -7,4 +7,4 @@ build:
 debug:
 	rm -f *.rice-box.go
 	go build
-	./g-wiki -http=:8000 -dir=files
+	./go-pages -http=:8000 -dir=files

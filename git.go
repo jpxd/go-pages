@@ -24,7 +24,7 @@ func (node *Node) GitAdd() *Node {
 func (node *Node) GitCommit(msg string, author string) *Node {
 	if author != "" {
 		gitCmd(exec.Command("git", "commit", "-m", msg,
-			fmt.Sprintf("--author='%s <system@g-wiki>'", author)))
+			fmt.Sprintf("--author='%s <system@go-pages>'", author)))
 	} else {
 		gitCmd(exec.Command("git", "commit", "-m", msg))
 	}

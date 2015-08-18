@@ -25,7 +25,7 @@ var (
 	directory = "files"
 	logLimit  = 5
 	logLimitS = ""
-	title     = "g-wiki"
+	title     = "go-pages"
 
 	templateBox *rice.Box
 )

@@ -8,5 +8,5 @@ src/github.com
 *.sw[po]
 # Binary
 /wiki
-/g-wiki
-/g-wiki.exe
+/go-pages
+/go-pages.exe
