@@ -19,6 +19,7 @@ h1:first-child {
 .edit-right {
 	position: absolute;
 	right: 15px;
+	top: 9px;
 }
 
 .edit-right:before {
