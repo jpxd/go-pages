@@ -6,10 +6,11 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
-	"strings"
 	"path"
+	"strings"
 )
 
+//WikiExtension represents an extension which can be added to the parser in registerAllExtensions
 type WikiExtension func(opts map[string]string, path string) (md string, err error)
 
 var extensions map[string]WikiExtension
@@ -59,7 +60,7 @@ func executeExpression(exp, path string) (res string, err error) {
 	}
 	extension, ok := extensions[name]
 	if !ok {
-		return "", errors.New(fmt.Sprintf("unknown extension '%s' in %s", name, path))
+		return "", fmt.Errorf("unknown extension '%s' in %s", name, path)
 	}
 	return extension(options, path)
 }
@@ -122,7 +123,9 @@ func treeExtension(opts map[string]string, url string) (md string, err error) {
 		buffer.WriteString(name)
 		buffer.WriteString("](")
 		buffer.WriteString(url)
-		buffer.WriteString("/")
+		if !strings.HasSuffix(url, "/") {
+			buffer.WriteString("/")
+		}
 		buffer.WriteString(name)
 		buffer.WriteString(")\n")
 	}
