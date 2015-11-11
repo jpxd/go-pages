@@ -67,8 +67,8 @@ img {
 }
 
 pre {
-	padding: 1em;
-	background-color: #F7F7F7;
+	padding: 0;
+	background: none;
 	border: none
 }
 
@@ -82,6 +82,10 @@ code {
 }
 
 .hljs {
-	padding: 0;
-	background: none;
+	padding: 1em;
+	margin: 20px 0;
+}
+
+.content {
+	padding: 14px;
 }
