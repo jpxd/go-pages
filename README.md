@@ -12,6 +12,12 @@ Simply go get it:
 
 	go get github.com/jpxd/go-pages
 
+initialize the git repo for the pages
+
+	mkdir files
+	cd files
+	git init
+
 then run it
 
 	go-pages -http=:8080 -dir=files
