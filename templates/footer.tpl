@@ -10,6 +10,11 @@
 </div>
 <!-- end container -->
 </div>
+
+<link href='http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700' rel='stylesheet' type='text/css'>
+<script src="/static/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
 </body>
 
 </html>

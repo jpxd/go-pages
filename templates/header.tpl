@@ -4,9 +4,11 @@
 <head>
 	<meta charset="UTF-8">
 	<title>{{.Title}}</title>
-	<link href="/static/css/bootstrap.min.css" rel="stylesheet">
-	<link href="/static/css/wiki.css" rel="stylesheet">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="/static/css/hljs/default.css" rel="stylesheet">
+	<link href="/static/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/static/css/main.css" rel="stylesheet">
 </head>
 
 <body>
