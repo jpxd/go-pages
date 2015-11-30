@@ -116,7 +116,7 @@ func treeExtension(opts map[string]string, url string) (md string, err error) {
 	buffer := bytes.Buffer{}
 	for _, f := range files {
 		name := strings.TrimSuffix(f.Name(), ".md")
-		if strings.HasPrefix(name, ".") || len(name) == 0 {
+		if f.IsDir() || strings.HasPrefix(name, ".") || len(name) == 0 {
 			continue
 		}
 		buffer.WriteString(" * [")
