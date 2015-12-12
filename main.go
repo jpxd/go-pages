@@ -106,6 +106,9 @@ func wikiHandler(w http.ResponseWriter, r *http.Request) {
 	if cookie, err := r.Cookie("author"); err == nil {
 		node.Author = cookie.Value
 	}
+	if node.Author == "" {
+		node.Author = "Unknown"
+	}
 
 	node.Dirs = listDirectories(r.URL.Path)
 
