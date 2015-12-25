@@ -9,7 +9,7 @@ html, body {
 	font-family: 'PT Sans', sans-serif;
 }
 
-h1, h2, h3, h4, h5, h6  {
+h1, h2, h3, h4, h5, h6	{
 	font-family: 'PT Sans', sans-serif;
 }
 
@@ -88,4 +88,22 @@ code {
 
 .content {
 	padding: 14px;
+}
+
+table {
+	display: block;
+	width: 100%;
+	overflow: auto;
+	word-break: normal;
+	word-break: keep-all;
+}
+
+table tr {
+	background-color: #fff;
+	border-top: 1px solid #ccc;
+}
+
+table th, table td {
+	padding: 6px 13px;
+	border: 1px solid #ddd;
 }
