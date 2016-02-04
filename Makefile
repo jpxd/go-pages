@@ -7,4 +7,5 @@ build:
 debug:
 	rm -f rice-box.go
 	go build
+	mkdir files && cd files && git init
 	./go-pages -http=:8000 -dir=files
