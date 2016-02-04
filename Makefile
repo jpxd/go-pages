@@ -5,6 +5,6 @@ build:
 	go build
 
 debug:
-	rm -f *.rice-box.go
+	rm -f rice-box.go
 	go build
 	./go-pages -http=:8000 -dir=files
