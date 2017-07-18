@@ -11,8 +11,15 @@ import (
 	"log"
 	"os/exec"
 	"regexp"
+	"strconv"
 	"strings"
 )
+
+var gitLogLimitString string
+
+func init() {
+	gitLogLimitString = strconv.Itoa(RevisionLogLimit)
+}
 
 // GitAdd node
 func (node *Node) GitAdd() *Node {
@@ -42,7 +49,7 @@ func (node *Node) GitShow() *Node {
 func (node *Node) GitLog() *Node {
 	buf := gitCmd(exec.Command(
 		"git", "log", "--pretty=format:%h %ad %s", "--date=relative",
-		"-n", logLimitS, "--", node.File))
+		"-n", gitLogLimitString, "--", node.File))
 	var err error
 	b := bufio.NewReader(buf)
 	var bytes []byte

@@ -1,139 +1,72 @@
+/*
+GNU GPLv3 - see LICENSE
+*/
+
 package main
 
 import (
 	"bytes"
-	"errors"
 	"fmt"
-	"io/ioutil"
 	"log"
-	"path"
 	"strings"
 )
 
-//WikiExtension represents an extension which can be added to the parser in registerAllExtensions
-type WikiExtension func(opts map[string]string, path string) (md string, err error)
-
-var extensions map[string]WikiExtension
-
-func registerExtension(key string, processFunction WikiExtension) {
-	extensions[key] = processFunction
+// Register your extension methods here
+var extensions = map[string]WikiExtension{
+	"tree": treeExtension,
 }
 
-func optionFallback(m map[string]string, key string, fallback string) string {
-	if value, ok := m[key]; ok {
-		return value
-	}
-	return fallback
-}
+// WikiExtension is a function wich can be called from a page like {{ functionName param1 param2 ... }}
+type WikiExtension func(params []string, path string) (markdown string, err error)
 
-func parseExpression(exp string) (name string, options map[string]string, err error) {
+var extensionStartDelimiter, extensionEndDelimiter = []byte("{{"), []byte("}}")
+
+func executeExpression(exp, path string) (markdown string, err error) {
 	exp = strings.Trim(exp, "{}")
-	exp = strings.TrimSpace(exp)
-	parts := strings.Split(exp, " ")
+	parts := strings.Fields(exp)
 
 	if len(parts) < 1 {
-		return "", nil, errors.New("empty expression")
+		return "", fmt.Errorf("Empty expression")
 	}
 
-	name = parts[0]
-	parts = parts[1:]
-
-	options = make(map[string]string)
-	for _, part := range parts {
-		if len(part) < 2 {
-			continue
-		}
-		kv := strings.Split(part, ":")
-		options[kv[0]] = "true"
-		if len(kv) > 1 {
-			options[kv[0]] = kv[1]
-		}
+	name := parts[0]
+	extension, exists := extensions[name]
+	if !exists {
+		return "", fmt.Errorf("Unknown extension '%s' in %s", name, path)
 	}
 
-	return name, options, nil
+	return extension(parts[1:], path)
 }
 
-func executeExpression(exp, path string) (res string, err error) {
-	name, options, err := parseExpression(exp)
-	if err != nil {
-		return "", err
-	}
-	extension, ok := extensions[name]
-	if !ok {
-		return "", fmt.Errorf("unknown extension '%s' in %s", name, path)
-	}
-	return extension(options, path)
-}
-
-func processExtensions(node *Node) {
-	if len(extensions) == 0 {
-		return
-	}
-
-	hay := node.Bytes
-	buffer := bytes.Buffer{}
-	startDelimiter, endDelimiter := []byte("{{"), []byte("}}")
+// ProcessExtensions processes all extension calls in the node contents and applies the content changes
+func (node *Node) ProcessExtensions() {
+	source := node.Bytes
+	target := bytes.Buffer{}
 
 	for {
-		expStart := bytes.Index(hay, startDelimiter)
+		expStart := bytes.Index(source, extensionStartDelimiter)
 		if expStart < 0 {
 			break
 		}
-		buffer.Write(hay[:expStart])
-		hay = hay[expStart:]
-		expEnd := bytes.Index(hay, endDelimiter)
+		target.Write(source[:expStart])
+		source = source[expStart:]
+		expEnd := bytes.Index(source, extensionEndDelimiter)
 		if expEnd < 0 {
+			target.Write([]byte("*Unmatched expression start*"))
 			break
 		}
-		expEnd += len(endDelimiter)
-
-		exp := string(hay[:expEnd])
+		expEnd += len(extensionEndDelimiter)
+		exp := string(source[:expEnd])
 
 		result, err := executeExpression(exp, node.Path)
 		if err != nil {
-			buffer.Write(hay[:expEnd])
+			target.Write(source[:expEnd])
 			log.Println(err)
 		} else {
-			buffer.WriteString(result)
+			target.WriteString(result)
 		}
-		hay = hay[expEnd:]
-
+		source = source[expEnd:]
 	}
-	buffer.Write(hay)
-	node.Bytes = buffer.Bytes()
-}
-
-func registerAllExtensions() {
-	registerExtension("tree", treeExtension)
-}
-
-func treeExtension(opts map[string]string, url string) (md string, err error) {
-	dirpath := path.Join(directory, url)
-	files, err := ioutil.ReadDir(dirpath)
-	if len(files) == 0 {
-		return "Such emptyness...", nil
-	}
-	buffer := bytes.Buffer{}
-	for _, f := range files {
-		name := strings.TrimSuffix(f.Name(), ".md")
-		if f.IsDir() || strings.HasPrefix(name, ".") || len(name) == 0 {
-			continue
-		}
-		buffer.WriteString(" * [")
-		buffer.WriteString(name)
-		buffer.WriteString("](")
-		buffer.WriteString(url)
-		if !strings.HasSuffix(url, "/") {
-			buffer.WriteString("/")
-		}
-		buffer.WriteString(name)
-		buffer.WriteString(")\n")
-	}
-
-	return buffer.String(), nil
-}
-
-func init() {
-	extensions = make(map[string]WikiExtension)
-	registerAllExtensions()
+	target.Write(source)
+	node.Bytes = target.Bytes()
 }
