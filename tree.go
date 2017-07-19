@@ -8,11 +8,11 @@ import (
 )
 
 func treeExtension(params []string, url string) (string, error) {
+	url = url[:strings.LastIndex(url, "/")]
 	if len(params) > 0 {
 		url = path.Join(url, params[0])
 	}
 	dirpath := path.Join(directory, url)
-
 	files, err := ioutil.ReadDir(dirpath)
 	if err != nil {
 		return "", err
@@ -25,6 +25,9 @@ func treeExtension(params []string, url string) (string, error) {
 	for _, f := range files {
 		name := strings.TrimSuffix(f.Name(), ".md")
 		if f.IsDir() {
+			if name == ".git" {
+				continue
+			}
 			targetURL := strings.TrimSuffix(url, "/") + "/" + name
 			buffer.WriteString(" * [*" + name + "*](" + targetURL + ")\n")
 			continue

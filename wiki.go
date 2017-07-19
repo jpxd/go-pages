@@ -81,6 +81,10 @@ func wikiHandler(w http.ResponseWriter, r *http.Request) {
 	reset := r.FormValue("revert")
 	revision := r.FormValue("revision")
 
+	// Default to index page on trailing slash
+	if r.URL.Path[len(r.URL.Path)-1] == '/' {
+		r.URL.Path += "index"
+	}
 	filePath := fmt.Sprintf("%s%s.md", directory, r.URL.Path)
 	node := &Node{
 		File:  r.URL.Path[1:] + ".md",
