@@ -12,12 +12,6 @@ Simply go get it:
 
 	go get github.com/jpxd/go-pages
 
-Initialize the git repo for the pages
-
-	mkdir files
-	cd files
-	git init
-
 Run it with
 
 	go-pages
@@ -43,6 +37,6 @@ For a list of available extensions, see below.
 
 Depth and subdir params can be combined.
 
-## Screenshot
+## Example screenshot
 
 ![Screenshot](static/screenshots/screenshot1.jpg)
