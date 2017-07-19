@@ -22,12 +22,27 @@ Run it with
 
 	go-pages
 
-Usable command line flags are:
+Available command line flags are:
 
-* -address=:8080
+* -address=:8080 *(in the format ip:port, empty ip binds to all ips)*
 * -dir=files *(data directory has to be an intialized git repository!)*
-* -title=CoolWiki
+* -title=CoolWiki *(title for the wiki)*
 
 ## Extensions
 
-*TODO...*
+You can call extension methods from markdown content like `{{ extensionName param1 ... }}`.
+For a list of available extensions, see below.
+
+### Available Extensions
+
+#### Tree
+
+`{{ tree }}` generates a flat map of the current directories files and subdirectories.
+
+`{{ tree anysubdir }}` generates a flat map of the files and subdirectories in *anysubdir*.
+
+Depth and subdir params can be combined.
+
+## Screenshot
+
+![Screenshot](static/screenshots/screenshot1.jpg)
