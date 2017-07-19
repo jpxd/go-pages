@@ -41,6 +41,7 @@ type Node struct {
 
 	Edit      bool // Edit mode
 	Revisions bool // Show revisions
+	AskDelete bool // Delete mode
 	Author    string
 	Changelog string
 }
@@ -93,12 +94,31 @@ func wikiHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	node.Revisions = parseBool(r.FormValue("revisions"))
 	node.Edit = parseBool(r.FormValue("edit"))
+	node.AskDelete = parseBool(r.FormValue("askdelete"))
 
 	if cookie, err := r.Cookie("author"); err == nil {
 		node.Author = cookie.Value
 	}
 	if node.Author == "" {
 		node.Author = "Unknown"
+	}
+
+	// Delete if needed
+	deleteNow := parseBool(r.FormValue("delete"))
+	if deleteNow {
+		// Delete file
+		file := r.URL.Path
+		changelog := fmt.Sprintf("Delete %s", node.File)
+		node.GitRemove().GitCommit(changelog, author)
+		// Move node path one level up and redirect
+		var location string
+		if file[len(file)-1] == '/' {
+			location = strings.TrimRight(file, "/")
+		} else {
+			file = file[:strings.LastIndexAny(file, "/")+1]
+		}
+		http.Redirect(w, r, location, http.StatusTemporaryRedirect)
+		return
 	}
 
 	node.Dirs = listDirectories(r.URL.Path)

@@ -23,17 +23,19 @@
 				{{ end }}
 				{{ end }}
 				<li class="no-before">{{ if .Revision}}<a href="?revision={{.Revision}}&revisions=1" class="text-muted">{{.Revision}}</a>{{end}}</li>
+				<li class="edit-right">
+				
+				{{ if .Edit | and .AskDelete }}
+				<a href="?delete=1" class="text-muted"><span class="glyphicon glyphicon-trash"></span> Are you sure?</a>&nbsp;
+				{{ else if .Edit }}
+				<a href="?edit=1&askdelete=1" class="text-muted"><span class="glyphicon glyphicon-trash"></span> Delete</a>&nbsp;
+				{{ end }}
 				{{ if .Edit | or .Revisions }}
-				<li class="edit-right">
-					<a href="?" class="text-muted">
-						<span class="glyphicon glyphicon-remove"></span> Close</a>
-				</li>
+					<a href="?" class="text-muted"><span class="glyphicon glyphicon-remove"></span> Close</a>
 				{{ else }}
-				<li class="edit-right">
-					<a href="?edit=1" class="text-muted">
-						<span class="glyphicon glyphicon-edit"></span> Edit</a>
+					<a href="?edit=1" class="text-muted"><span class="glyphicon glyphicon-edit"></span> Edit</a>
+				{{ end }}
 				</li>
-				{{end}}
 			</ol>
 
 		</div>

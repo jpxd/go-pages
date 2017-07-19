@@ -106,6 +106,12 @@ func (node *Node) GitRevert() *Node {
 	return node
 }
 
+// GitRemove file
+func (node *Node) GitRemove() *Node {
+	gitCmd(exec.Command("git", "rm", node.File))
+	return node
+}
+
 // Run git command, will currently die on all errors
 func gitCmd(cmd *exec.Cmd) *bytes.Buffer {
 	cmd.Dir = fmt.Sprintf("%s/", directory)
