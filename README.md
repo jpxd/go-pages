@@ -3,7 +3,7 @@
 A wiki tool built on golang with git as the storage back-end. Content
 is formatted in [markdown
 syntax](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet). The wiki is
-rendered with go templates and [bootstrap](http://getbootstrap.com) css but doesn't depend on any CDN.
+rendered with go templates, [bootstrap](http://getbootstrap.com) css and [highlightjs](https://highlightjs.org) for code highlighting but doesn't depend on any CDN.
 This project was forked from [aspic/g-wiki](https://github.com/aspic/g-wiki).
 
 ## Using
