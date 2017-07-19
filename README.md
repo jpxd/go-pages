@@ -8,14 +8,6 @@ This project was forked from [aspic/g-wiki](https://github.com/aspic/g-wiki).
 
 ## Using
 
-Simply go get it:
-
-	go get github.com/jpxd/go-pages
-
-Run it with
-
-	go-pages
-
 Available command line flags are:
 
 * -address=:8080 *(in the format ip:port, empty ip binds to all ips)*

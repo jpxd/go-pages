@@ -9,7 +9,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"path"
 )
 
 // RevisionLogLimit limits the maximum amount of revisions shown for a page
@@ -40,14 +39,7 @@ func main() {
 	}
 
 	// Static files (js, css, etc)
-	executablePath, err := os.Executable()
-	if err != nil {
-		panic(err)
-	}
-	executableDirectory := path.Dir(executablePath)
-	staticDirectory := path.Join(executableDirectory, "static")
-
-	fileServer := http.FileServer(http.Dir(staticDirectory))
+	fileServer := http.FileServer(http.Dir("./static"))
 	http.Handle("/static/", http.StripPrefix("/static/", fileServer))
 
 	// Wiki handlers
