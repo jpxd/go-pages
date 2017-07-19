@@ -17,19 +17,10 @@ const RevisionLogLimit = 5
 
 var (
 	// default values, can be overriden by flags
-	directory           = "files"
-	address             = ":8080"
-	title               = "gopages"
-	executableDirectory = "."
+	directory = "files"
+	address   = ":8080"
+	title     = "gopages"
 )
-
-func init() {
-	executablePath, err := os.Executable()
-	if err != nil {
-		panic(err)
-	}
-	executableDirectory = path.Dir(executablePath)
-}
 
 func main() {
 	// Define command line flags and parse them
@@ -49,7 +40,13 @@ func main() {
 	}
 
 	// Static files (js, css, etc)
+	executablePath, err := os.Executable()
+	if err != nil {
+		panic(err)
+	}
+	executableDirectory := path.Dir(executablePath)
 	staticDirectory := path.Join(executableDirectory, "static")
+
 	fileServer := http.FileServer(http.Dir(staticDirectory))
 	http.Handle("/static/", http.StripPrefix("/static/", fileServer))
 

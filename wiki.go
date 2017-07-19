@@ -18,15 +18,11 @@ var baseTemplate = template.New("wiki")
 
 func init() {
 	// Load base templates for reusing
-	templates := []string{"templates/header.tpl", "templates/footer.tpl",
+	_, err := baseTemplate.ParseFiles("templates/header.tpl", "templates/footer.tpl",
 		"templates/edit.tpl", "templates/revisions.tpl",
-		"templates/revision.tpl", "templates/node.tpl"}
-
-	for _, file := range templates {
-		_, err := baseTemplate.ParseFiles(path.Join(executableDirectory, file))
-		if err != nil {
-			log.Fatal(err)
-		}
+		"templates/revision.tpl", "templates/node.tpl")
+	if err != nil {
+		log.Fatal(err)
 	}
 }
 
