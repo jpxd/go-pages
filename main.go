@@ -35,7 +35,7 @@ func main() {
 
 	// Check if wiki data directory exists
 	if _, err := os.Stat(directory); err != nil {
-		log.Fatalln("WARNING: the specified directory (%q) does not exist!", directory)
+		log.Fatalf("WARNING: the specified directory (%q) does not exist!", directory)
 	}
 
 	// Static files (js, css, etc)
