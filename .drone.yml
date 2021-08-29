@@ -1,0 +1,11 @@
+kind: pipeline
+type: kubernetes
+name: default
+
+steps:
+- name: go-pages
+  image: golang:1.16
+  commands:
+  - go get -v
+  - go vet -v
+  - go build -v
