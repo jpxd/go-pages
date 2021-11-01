@@ -71,8 +71,6 @@ func (node *Node) isHead() bool {
 
 // ToMarkdown processes the node contents.
 func (node *Node) ToMarkdown() {
-	node.ProcessExtensions()
-
 	var source = node.Bytes
 	var buf bytes.Buffer
 	if err := md.Convert(source, &buf); err != nil {
