@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"html/template"
 	"io/ioutil"
@@ -11,8 +12,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/russross/blackfriday"
+	"github.com/yuin/goldmark"
+	"github.com/yuin/goldmark/extension"
 )
+
+var md = goldmark.New(goldmark.WithExtensions(extension.Linkify, extension.GFM))
 
 var baseTemplate = template.New("wiki")
 
@@ -68,7 +72,14 @@ func (node *Node) isHead() bool {
 // ToMarkdown processes the node contents.
 func (node *Node) ToMarkdown() {
 	node.ProcessExtensions()
-	node.Markdown = template.HTML(string(blackfriday.MarkdownCommon(node.Bytes)))
+
+	var source = node.Bytes
+	var buf bytes.Buffer
+	if err := md.Convert(source, &buf); err != nil {
+		panic(err)
+	}
+
+	node.Markdown = template.HTML(buf.String())
 }
 
 func wikiHandler(w http.ResponseWriter, r *http.Request) {
