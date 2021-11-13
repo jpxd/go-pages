@@ -6,9 +6,10 @@ A wiki tool built on golang with git as the storage back-end. Content is formatt
 
 Available command line flags are:
 
-* -address=:8080 *(in the format ip:port, empty ip binds to all ips)*
-* -dir=files *(data directory has to be an intialized git repository!)*
-* -title=CoolWiki *(title for the wiki)*
+* `--address=:8080` *(in the format ip:port, empty ip binds to all ips)*
+* `--dir=files` *(data directory has to be an intialized git repository!)*
+* `--title=CoolWiki` *(title for the wiki)*
+* `--basepath=/wiki/` *(base path for reverse proxy web applications)*
 
 ## Extensions
 
