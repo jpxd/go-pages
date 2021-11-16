@@ -1,21 +1,21 @@
-FROM golang:latest 
-RUN apt-get install git
+FROM golang:1.16
 
-RUN mkdir /app 
-ADD . /app/ 
-WORKDIR /app 
+ENV CGO_ENABLED 0
+ENV GO111MODULE on
+
+WORKDIR /go/src/go-pages
+COPY . .
+
+RUN go get -v
+RUN go vet -v
+RUN go install
 
 RUN mkdir -p files
-RUN git init files
-
+RUN git config --global init.defaultBranch main
 RUN git config --global user.email "system@dockercontainer"
 RUN git config --global user.name "system"
-
-ENV GOPATH /app
-ENV GOBIN $GOPATH/bin
-RUN go get .
-RUN go build -o main . 
-
-ENTRYPOINT ["/app/main"]
+RUN git init files
 
 EXPOSE 8080
+
+ENTRYPOINT ["/go/bin/go-pages"]

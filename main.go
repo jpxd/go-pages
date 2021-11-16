@@ -19,6 +19,7 @@ var (
 	directory = "files"
 	address   = ":8080"
 	title     = "gopages"
+	basepath  = "/"
 )
 
 func main() {
@@ -26,16 +27,18 @@ func main() {
 	flagDirectory := flag.String("dir", directory, "directory where the markdown files are stored")
 	flagAddress := flag.String("address", address, "address for the webserver to bind to, example: 0.0.0.0:8000")
 	flagTitle := flag.String("title", title, "title to display")
+	flagBasepath := flag.String("basepath", basepath, "base path, for web application proxy pass")
 	flag.Parse()
 
 	// Update global variables to possibly overriden ones
 	directory = *flagDirectory
 	address = *flagAddress
 	title = *flagTitle
+	basepath = *flagBasepath
 
 	// Check if wiki data directory exists
 	if _, err := os.Stat(directory); err != nil {
-		log.Fatalln("WARNING: the specified directory (%q) does not exist!", directory)
+		log.Fatalf("WARNING: the specified directory (%q) does not exist!", directory)
 	}
 
 	// Static files (js, css, etc)

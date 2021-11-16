@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"html/template"
 	"io/ioutil"
@@ -11,8 +12,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/russross/blackfriday"
+	"github.com/yuin/goldmark"
+	"github.com/yuin/goldmark/extension"
 )
+
+var md = goldmark.New(goldmark.WithExtensions(extension.Linkify, extension.GFM))
 
 var baseTemplate = template.New("wiki")
 
@@ -29,6 +33,7 @@ func init() {
 // Node holds a Wiki node.
 type Node struct {
 	Title    string
+	Basepath string
 	Path     string
 	File     string
 	Content  string
@@ -67,8 +72,13 @@ func (node *Node) isHead() bool {
 
 // ToMarkdown processes the node contents.
 func (node *Node) ToMarkdown() {
-	node.ProcessExtensions()
-	node.Markdown = template.HTML(string(blackfriday.MarkdownCommon(node.Bytes)))
+	var source = node.Bytes
+	var buf bytes.Buffer
+	if err := md.Convert(source, &buf); err != nil {
+		panic(err)
+	}
+
+	node.Markdown = template.HTML(buf.String())
 }
 
 func wikiHandler(w http.ResponseWriter, r *http.Request) {
@@ -88,9 +98,10 @@ func wikiHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	filePath := fmt.Sprintf("%s%s.md", directory, r.URL.Path)
 	node := &Node{
-		File:  r.URL.Path[1:] + ".md",
-		Path:  r.URL.Path,
-		Title: title,
+		File:     r.URL.Path[1:] + ".md",
+		Path:     r.URL.Path,
+		Title:    title,
+		Basepath: strings.TrimSuffix(basepath, "/"), // we do not want basepath to end with a /
 	}
 	node.Revisions = parseBool(r.FormValue("revisions"))
 	node.Edit = parseBool(r.FormValue("edit"))
