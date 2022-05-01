@@ -28,7 +28,7 @@ func main() {
 	// Define command line flags and parse them
 	flagDirectory := flag.String("dir", directory, "directory where the markdown files are stored")
 	flagTemplates := flag.String("templates", templates, "directory where the templates are stored")
-	flagStatic := flag.String("static", static, "directlry where the static files are stored")
+	flagStatic := flag.String("static", static, "directory where the static files are stored")
 	flagAddress := flag.String("address", address, "address for the webserver to bind to, example: 0.0.0.0:8000")
 	flagTitle := flag.String("title", title, "title to display")
 	flagBasepath := flag.String("basepath", basepath, "base path, for web application proxy pass")
