@@ -17,6 +17,8 @@ const RevisionLogLimit = 5
 var (
 	// default values, can be overriden by flags
 	directory = "files"
+	templates = "templates"
+	static    = "static"
 	address   = ":8080"
 	title     = "gopages"
 	basepath  = "/"
@@ -25,6 +27,8 @@ var (
 func main() {
 	// Define command line flags and parse them
 	flagDirectory := flag.String("dir", directory, "directory where the markdown files are stored")
+	flagTemplates := flag.String("templates", templates, "directory where the templates are stored")
+	flagStatic := flag.String("static", static, "directory where the static files are stored")
 	flagAddress := flag.String("address", address, "address for the webserver to bind to, example: 0.0.0.0:8000")
 	flagTitle := flag.String("title", title, "title to display")
 	flagBasepath := flag.String("basepath", basepath, "base path, for web application proxy pass")
@@ -32,6 +36,8 @@ func main() {
 
 	// Update global variables to possibly overriden ones
 	directory = *flagDirectory
+	templates = *flagTemplates
+	static = *flagStatic
 	address = *flagAddress
 	title = *flagTitle
 	basepath = *flagBasepath
@@ -41,8 +47,13 @@ func main() {
 		log.Fatalf("WARNING: the specified directory (%q) does not exist!", directory)
 	}
 
+	err := loadTemplates(templates)
+	if err != nil {
+		log.Fatalf("Error loading templates from %s: %v", templates, err)
+	}
+
 	// Static files (js, css, etc)
-	fileServer := http.FileServer(http.Dir("./static"))
+	fileServer := http.FileServer(http.Dir(static))
 	http.Handle("/static/", http.StripPrefix("/static/", fileServer))
 
 	// Wiki handlers

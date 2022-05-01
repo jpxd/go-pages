@@ -20,14 +20,25 @@ var md = goldmark.New(goldmark.WithExtensions(extension.Linkify, extension.GFM))
 
 var baseTemplate = template.New("wiki")
 
-func init() {
+func loadTemplates(templateDirectory string) error {
 	// Load base templates for reusing
-	_, err := baseTemplate.ParseFiles("templates/header.tpl", "templates/footer.tpl",
-		"templates/edit.tpl", "templates/revisions.tpl",
-		"templates/revision.tpl", "templates/node.tpl")
+	foundTemplates := make([]string, 0)
+	contents, err := ioutil.ReadDir(templateDirectory)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
+	for _, fileinfo := range contents {
+		if path.Ext(fileinfo.Name()) == ".tpl" {
+			foundTemplates = append(foundTemplates, path.Join(templates, fileinfo.Name()))
+		}
+	}
+
+	_, err = baseTemplate.ParseFiles(foundTemplates...)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Node holds a Wiki node.
